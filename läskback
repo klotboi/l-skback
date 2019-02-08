@@ -1,0 +1,223 @@
+using System;
+using System.Linq;
+
+namespace sodacrate
+{
+    class Sodacrate
+    {
+        private string[] flaskor = new string[24];
+        private int antal_flaskor = 0; //Håller reda på antal flaskor
+        int pris; //priset tilldelas senare
+
+
+        //------------METOD------------
+        //Sköter våran Meny
+        //-----------------------------
+        public void Run()
+        {
+            bool meny = true;
+            while (meny)
+            {
+                Console.WriteLine("\n-------------------------------\nVälj ett alternativ: ");
+                Console.WriteLine("[1] Lägg till läsk");
+                Console.WriteLine("[2] Se vad som finns i backen");
+                Console.WriteLine("[3] Räkna ut vad backen kostar");
+                Console.WriteLine("[4] Hitta läsk i backen");
+                Console.WriteLine("[5] Sortera läskbacken");
+                Console.WriteLine("[0] Avsluta programmet\n-------------------------------\n");
+
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                        add_soda();
+                        break;
+                    case "2":
+                        print_crate();
+                        break;
+                    case "3":
+                        calc_total();
+                        break;
+                    case "4":
+                        find_soda();
+                        break;
+                    case "5":
+                        sort_sodas();
+                        break;
+                    case "0":
+                        Console.WriteLine("Programmet Avslutas");
+                        Environment.Exit(2);
+                        break;
+                    default:
+                        Console.WriteLine("Felaktig inmatning");
+                        break;
+
+
+                }
+                meny = false; //För att inte menyn ska poppa upp direkt efter vi valt ett alternativ
+                //vilket förhindrar valen som vi gör i alternativet
+                meny = true; //sätter den till true igen efter för att menyn ska poppa upp vid rätt tillfälle
+            }
+
+        }
+
+        //------------METOD------------
+        //Lägger till drycker i backen
+        //-----------------------------
+        public void add_soda()
+        {
+            Console.WriteLine("\nVälj dryck:");
+
+            //Användarens val
+            Console.WriteLine("[1] Cola");
+            Console.WriteLine("[2] Fanta");
+            Console.WriteLine("[3] Ramlösa");
+            Console.WriteLine("[4] Slumpa dryck");
+            Console.WriteLine("[0] Tillbaka till menyn\n");
+
+            //En loop för att alltid lägga till en flaska sålänge backen inte är full
+            do
+            {
+                Console.Write("Dryck: ");
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                        Console.WriteLine("Du valde Cola");
+                        flaskor[antal_flaskor] = "Cola";
+                        antal_flaskor++;
+                        break;
+
+                    case "2":
+                        Console.WriteLine("Du valde Fanta");
+                        flaskor[antal_flaskor] = "Fanta";
+                        antal_flaskor++;
+                        break;
+
+                    case "3":
+                        Console.WriteLine("Du valde Ramlösa");
+                        flaskor[antal_flaskor] = "Ramlösa";
+                        antal_flaskor++;
+                        break;
+
+                    case "4":
+                        RandomSoda();
+                        break;
+
+                    case "0":
+                        Run();
+                        break;
+
+                    default:
+                        Console.WriteLine("Felaktig inmatning");
+                        break;
+                }
+            } while (antal_flaskor < flaskor.Length); //Villkoret för loopens slut
+
+        }
+
+        //------------METOD------------
+        //Slumpar fram en läsk i backen
+        //-----------------------------
+        public void RandomSoda()
+        {
+
+            Random random = new Random();
+            int randomFlaska = random.Next(1, 4);
+
+            switch (randomFlaska)
+            {
+                case 1:
+                    Console.WriteLine("Du valde Cola");
+                    flaskor[antal_flaskor] = "Cola";
+                    antal_flaskor++;
+                    break;
+
+                case 2:
+                    Console.WriteLine("Du valde Fanta");
+                    flaskor[antal_flaskor] = "Fanta";
+                    antal_flaskor++;
+                    break;
+
+                case 3:
+                    Console.WriteLine("Du valde Ramlösa");
+                    flaskor[antal_flaskor] = "Ramlösa";
+                    antal_flaskor++;
+                    break;
+
+                default:
+                    Console.WriteLine("Fel val!");
+                    break;
+            }
+        }
+
+        //------------METOD------------
+        //Skriver ut innehållet i backen
+        //-----------------------------
+        public void print_crate()
+        {
+            foreach (string dryck in flaskor)
+            {
+                if (dryck != null)
+                    Console.WriteLine(dryck);
+                else
+                    Console.WriteLine("Tom plats");
+            }
+            //Missa inte hjälpkoden som finns i projektbeskrivningen
+            //Där beskrivs hur man löser det med tomma positioner i vektorn
+        }
+
+        //------------METOD------------
+        //Räknar ut totalpriset på backen
+        //-----------------------------
+        public int calc_total()
+        {
+            for (int i = 0; i < flaskor.Length; i++)
+                pris = pris + 5;
+            {
+                Console.WriteLine("Den totala kostnaden för din back är {0} kronor.", pris);
+            }
+            return pris;
+        }
+
+        public void find_soda()
+        {
+            Console.WriteLine("Skriv namnet på drycken som du söker.");
+            string key = Convert.ToString(Console.ReadLine());
+            for (int i = 0; i < flaskor.Length; i++)
+            {
+                if (flaskor[i] == key)
+                {
+                    Console.WriteLine("\nDrycken du söker finns på plats " + i);
+                }
+            }
+        }
+
+        //-------------METOD------------
+        //Sorterar våran läskback efter 
+        //längd på elementen
+        //------------------------------
+        public void sort_sodas()
+        {
+            var sortering =
+            from w in flaskor
+            orderby w.Length
+            select w;
+
+            Console.WriteLine("Nu har jag sorterat läskbacken åt dig!\nHär kommer den nya listan!\n");
+            foreach (var w in sortering)
+            {
+                Console.WriteLine(w);
+            }
+        }
+    }
+        class Program
+        {
+            public static void Main(string[] args)
+            {
+                //Skapar ett objekt av klassen Sodacrate som heter sodacrate
+                var sodacrate = new Sodacrate();
+                sodacrate.Run();
+                Console.Write("Press any key to continue . . . ");
+                Console.ReadKey(true);
+            }
+        }
+}
